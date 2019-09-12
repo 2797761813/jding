@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty scope="context" name="logLevel" source="log.level"/>
+    <springProperty scope="context" name="logPath" source="log.path"/>
+
+    <!-- 系统日志 -->
+    <appender name="syslog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志记录路径，可用绝对路径和相对路径 -->
+        <file>${logPath}/yto_sys/yto_sys.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名 -->
+            <FileNamePattern>${logPath}/yto_sys/yto_sys_%d{yyyy-MM-dd}_%i.log
+            </FileNamePattern>
+            <maxHistory>10</maxHistory>
+            <!-- 滚动记录触发条件 超过10MB则滚动下一个记录 -->
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>[%p] %d{yyyy-MM-dd HH:mm:ss.SSS} - [%X{threadKey}] %C.%M: %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 操作日志 -->
+    <appender name="optlog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/yto_opt/yto_opt.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名 -->
+            <FileNamePattern>${logPath}/yto_opt/yto_opt_%d{yyyy-MM-dd}_%i.log
+            </FileNamePattern>
+            <maxHistory>10</maxHistory>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>[%p] %d{yyyy-MM-dd HH:mm:ss.SSS} - [%X{threadKey}] %C.%M: %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出，详细请参考log4j API -->
+            <pattern>[%p] %d{yyyy-MM-dd HH:mm:ss.SSS} - [%X{threadKey}] %C.%M: %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="systemLog" additivity="true" level="${logLevel}">
+        <appender-ref ref="syslog"/>
+    </logger>
+
+    <logger name="operatorLog" additivity="true" level="${logLevel}">
+        <appender-ref ref="optlog"/>
+    </logger>
+
+    <root level="${logLevel}">
+       <appender-ref ref="consoleAppender" />
+    </root>
+
+</configuration>
