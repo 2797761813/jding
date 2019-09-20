@@ -13,25 +13,32 @@ public class NettyClientHandler extends ChannelHandlerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(NettyClientHandler.class);
 
     //private final ByteBuf firstMessage;
-
+    //begin
+    private static final String ECHO_REQ = "Hi, Welcome to Netty.$_";
+    //end
     private int counter;
 
     private byte[] req;
 
     public NettyClientHandler() {
-        req = ("QUERY TIME ORDER" + System.getProperty("line.separator")).getBytes();
+        //req = ("QUERY TIME ORDER" + System.getProperty("line.separator")).getBytes();
         /*firstMessage = Unpooled.buffer(req.length);
         firstMessage.writeBytes(req);*/
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ByteBuf firstMessage = null;
+        /*ByteBuf firstMessage = null;
         for(int i =0; i < 100;i++) {
              firstMessage = Unpooled.buffer(req.length);
              firstMessage.writeBytes(req);
              ctx.writeAndFlush(firstMessage);
+        }*/
+        //begin
+        for(int i =0;i < 10; i++) {
+            ctx.writeAndFlush(Unpooled.copiedBuffer(ECHO_REQ.getBytes()));
         }
+        //end
     }
 
     @Override
@@ -41,8 +48,10 @@ public class NettyClientHandler extends ChannelHandlerAdapter {
         buf.readBytes(req);
 
         String body = new String(req,"UTF-8");*/
-        String body = (String) msg;
-        System.out.println("Now is:" + body + "; the counter is:" + ++counter);
+        /*String body = (String) msg;
+        System.out.println("Now is:" + body + "; the counter is:" + ++counter);*/
+        //
+        System.out.println("This is" + ++counter + " times receive server:[" + msg + "]");
 
     }
 

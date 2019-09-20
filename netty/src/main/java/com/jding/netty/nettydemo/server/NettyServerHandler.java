@@ -1,13 +1,8 @@
 package com.jding.netty.nettydemo.server;
 
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 @Component
 public class NettyServerHandler extends ChannelHandlerAdapter {
@@ -33,7 +28,7 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
         /*String body = new String(req,"UTF-8").substring(0,req.length-
                 System.getProperty("line.separator").length());*/
         //如果设置了StringDecoder() 可以把msg直接强转weiString类型
-        String body = (String)msg;
+       /* String body = (String)msg;
 
         System.out.println("The time server receive order:" + body + ";the counter:"
         + ++count);
@@ -43,7 +38,14 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
                 "BAO ORDER";
         currentTime = currentTime + System.getProperty("line.separator");
         ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());
-        ctx.writeAndFlush(resp);
+        ctx.writeAndFlush(resp);*/
+
+       //begin DelimiterBasedFrameDecode
+        String body = (String)msg;
+        System.out.println("This is" + ++count + "time receive client:[" +
+               body +"]");
+        body = body + "_";
+        ctx.writeAndFlush(body);
     }
 
     @Override
